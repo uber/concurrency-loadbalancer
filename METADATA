@@ -1,0 +1,11 @@
+schema:
+    version: 1
+---
+owner:
+  assetUuid: ff6c1c28-fb69-4927-983b-c85c484f9a1e
+  name: Streaming Data
+  inherit: parents
+  managerEmail: mingmin@uber.com
+reviewers:
+  groups:
+    - kafka_admins
