@@ -47,6 +47,7 @@ public abstract class AbstractConcurrencyLoadBalancer<T> implements LeastConcurr
         this.metrics = new MetricsImpl(tasks, ticker);
     }
 
+    @Override
     public Metrics getMetrics() {
         return metrics;
     }
@@ -263,39 +264,6 @@ public abstract class AbstractConcurrencyLoadBalancer<T> implements LeastConcurr
          * @return the b
          */
         B withTasks(Collection<T> tasks);
-    }
-
-    /**
-     * Least concurrency Loadbalancer metrics
-     */
-    public interface Metrics {
-        /**
-         * per second request rate
-         *
-         * @return the double
-         */
-        double requestRate();
-
-        /**
-         * per second completion result success rate
-         *
-         * @return the double
-         */
-        double successRate();
-
-        /**
-         * per second completion result failure rate
-         *
-         * @return the double
-         */
-        double failureRate();
-
-        /**
-         * Coefficient of variation of request distribution.
-         *
-         * @return the double
-         */
-        double requestCOV();
     }
 
     /**
