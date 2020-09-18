@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(WeightedSelector.class)
@@ -74,6 +75,34 @@ public class ArrayConcurrencyLoadBalancerTest {
             ct2.complete();
         }
         Assert.assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testMultiComplete() {
+        ArrayList<String> entries = new ArrayList<String>() {{add("a"); add("b");}};
+        final AtomicInteger pendingRequest = new AtomicInteger();
+
+        ArrayConcurrencyLoadBalancer<String> loadBalancer = ArrayConcurrencyLoadBalancer.newBuilder(String.class)
+                .withTasks(entries)
+                .withTaskListener(new CompletableTask.Listener<String>() {
+                    @Override
+                    public void onCreate(String s) {
+                        pendingRequest.incrementAndGet();
+                    }
+
+                    @Override
+                    public void onComplete(String s, boolean succeed) {
+                        pendingRequest.decrementAndGet();
+                    }
+                })
+                .build();
+        Assert.assertEquals(0, pendingRequest.get());
+        CompletableTask<String> ct1 = loadBalancer.next();
+        Assert.assertEquals(1, pendingRequest.get());
+        ct1.complete();
+        Assert.assertEquals(0, pendingRequest.get());
+        ct1.complete();
+        Assert.assertEquals(0, pendingRequest.get());
     }
 
     @Test

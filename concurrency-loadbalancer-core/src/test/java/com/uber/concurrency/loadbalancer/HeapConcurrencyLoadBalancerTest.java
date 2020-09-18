@@ -10,6 +10,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockIgnore("javax.management.*")
@@ -59,6 +60,34 @@ public class HeapConcurrencyLoadBalancerTest {
             ct2.complete();
         }
         Assert.assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testMultiComplete() {
+        ArrayList<String> entries = new ArrayList<String>() {{add("a"); add("b");}};
+        final AtomicInteger pendingRequest = new AtomicInteger();
+
+        HeapConcurrencyLoadBalancer<String> loadBalancer = HeapConcurrencyLoadBalancer.newBuilder(String.class)
+                .withTasks(entries)
+                .withTaskListener(new CompletableTask.Listener<String>() {
+                    @Override
+                    public void onCreate(String s) {
+                        pendingRequest.incrementAndGet();
+                    }
+
+                    @Override
+                    public void onComplete(String s, boolean succeed) {
+                        pendingRequest.decrementAndGet();
+                    }
+                })
+                .build();
+        Assert.assertEquals(0, pendingRequest.get());
+        CompletableTask<String> ct1 = loadBalancer.next();
+        Assert.assertEquals(1, pendingRequest.get());
+        ct1.complete();
+        Assert.assertEquals(0, pendingRequest.get());
+        ct1.complete();
+        Assert.assertEquals(0, pendingRequest.get());
     }
 
     @Test

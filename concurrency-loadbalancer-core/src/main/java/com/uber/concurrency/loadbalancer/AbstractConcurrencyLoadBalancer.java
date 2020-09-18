@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 
@@ -84,6 +85,7 @@ public abstract class AbstractConcurrencyLoadBalancer<T> implements LeastConcurr
      * AbstractCompletableTask
      */
     abstract class AbstractCompletableTask implements CompletableTask {
+        final AtomicBoolean completed = new AtomicBoolean(false);
         final long startNano;
         final T task;
 
@@ -93,9 +95,14 @@ public abstract class AbstractConcurrencyLoadBalancer<T> implements LeastConcurr
             onTaskSelected(t);
         }
 
+        //if there are multiple completion, only the first call should succeed
         @Override
-        public void complete(boolean succeed) {
-            onTaskCompleted(task, succeed);
+        public boolean complete(boolean succeed) {
+            if (completed.compareAndSet(false, true)) {
+                onTaskCompleted(task, succeed);
+                return true;
+            }
+            return false;
         }
 
         @Override
@@ -127,9 +134,13 @@ public abstract class AbstractConcurrencyLoadBalancer<T> implements LeastConcurr
         }
 
         @Override
-        public void complete(boolean succeed) {
-            super.complete(succeed);
-            this.taskConcurrency.complete(succeed, Duration.ofNanos(ticker.read() - startNano));
+        public boolean complete(boolean succeed) {
+            if (super.complete(succeed)) {
+                this.taskConcurrency.complete(succeed, Duration.ofNanos(ticker.read() - startNano));
+                return true;
+            }
+
+            return false;
         }
     }
 

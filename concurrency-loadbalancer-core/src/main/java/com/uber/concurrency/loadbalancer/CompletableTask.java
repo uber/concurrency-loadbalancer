@@ -23,15 +23,18 @@ public interface CompletableTask<T> {
      * ConcurrencyLoadBalancer use this callback to update its internal states.
      *
      * @param succeed indicates if the task is succeed or failed, some loadBalancer                differentiate result
+     * @return the boolean indicates if completion succeed.
      */
-    void complete(boolean succeed);
+    boolean complete(boolean succeed);
 
     /**
      * equivalent to complete(true)
      * invoke this function if caller don't want loadBalancer to differentiate result
+     *
+     * @return the boolean indicates if completion succeed.
      */
-    default void complete() {
-        complete(true);
+    default boolean complete() {
+        return complete(true);
     }
 
     /**
@@ -88,7 +91,8 @@ public interface CompletableTask<T> {
         }
 
         @Override
-        public void complete(boolean succeed) {
+        public boolean complete(boolean succeed) {
+            return true;
         }
     }
 }
