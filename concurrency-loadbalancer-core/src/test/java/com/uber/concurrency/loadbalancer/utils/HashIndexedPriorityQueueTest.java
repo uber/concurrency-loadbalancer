@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HashIndexedPriorityQueueTest {
 
@@ -112,6 +113,33 @@ public class HashIndexedPriorityQueueTest {
     }
 
     @Test
+    public void testFairness() {
+        Comparator<Entity> comparator = Comparator.comparingInt(o -> o.value);
+        HashIndexedPriorityQueue<Entity> hpq = new HashIndexedPriorityQueue<>(comparator);
+        int keys = 128;
+        for (int i = 0; i < keys; ++i) {
+            hpq.add(new Entity(i, 0));
+        }
+        Map<Integer, AtomicInteger> idFreq = new HashMap<>();
+        int totalFreq = 1000000;
+        for (int i=0; i< totalFreq; ++i) {
+            Entity s = hpq.poll();
+            idFreq.computeIfAbsent(s.id, o->new AtomicInteger()).incrementAndGet();
+            s.value += 1;
+            hpq.offer(s);
+            hpq.remove(s);
+            s.value -= 1;
+            hpq.offer(s);
+        }
+        for (int i = 0 ; i < keys; ++i) {
+            int freq = idFreq.get(i).get();
+            double prob = freq / (double)totalFreq;
+            double expected = 1 / (double)keys;
+            Assert.assertTrue( Math.abs(prob - expected) < expected * 0.1);
+        }
+    }
+
+    @Test
     public void testUpdateOrderInPlace() {
         Comparator<Entity> comparator = Comparator.comparingInt(o -> o.value);
         PriorityQueue<Entity> pq = new PriorityQueue<>(comparator);
@@ -157,7 +185,12 @@ public class HashIndexedPriorityQueueTest {
     }
 
     private class Entity {
+        int id;
         int value;
+        Entity(int id, int v) {
+            this.id = id;
+            this.value = v;
+        }
         Entity(int v) {
             this.value = v;
         }

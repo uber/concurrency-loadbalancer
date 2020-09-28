@@ -25,6 +25,9 @@ import java.util.Set;
  * With {@link HashIndexedPriorityQueue}, offer(obj) allows the queue to adjust order in-place with O(logN)
  * Complexity
  *
+ * Fairness guarantee
+ * If there are multiple minimal value items in HashIndexedPriorityQueue, they shall have equal probability being polled
+ *
  * Example: Suppose class Entity.value is Integer
  * <pre>
  * class Entity {
@@ -47,6 +50,7 @@ public class HashIndexedPriorityQueue<E> extends AbstractQueue<E> implements Set
     private final HashMap<E, Integer> entityToIndex;
     private final List<E> entityList;
     private final Comparator<E> comparator;
+    private final RandomBooleanGenerator booleanGenerator = new RandomBooleanGenerator();
 
     /**
      * Instantiates a new Hash indexed priority queue.
@@ -172,6 +176,7 @@ public class HashIndexedPriorityQueue<E> extends AbstractQueue<E> implements Set
 
    /**
     * exchange index with smaller child if given entity is bigger
+    * when two children are equal in value, choose one child in equal possibility
     */
     private void siftDown(int index, E e) {
         int oIndex = index;
@@ -184,7 +189,8 @@ public class HashIndexedPriorityQueue<E> extends AbstractQueue<E> implements Set
 
             if (rcIndex < size) {
                 E rc = entityList.get(rcIndex);
-                if (comparator.compare(c, rc) > 0) {
+                int cmp = comparator.compare(c, rc);
+                if (cmp > 0 || (cmp == 0 && booleanGenerator.next())) {
                     c = rc;
                     cIndex = rcIndex;
                 }
