@@ -4,6 +4,28 @@ public interface LeastConcurrencyLoadBalancer<T> extends LoadBalancer<Completabl
     LeastConcurrencyLoadBalancer NOOP_INSTANCE = new NoopLeastConcurrencyLoadBalancer();
 
     class NoopLeastConcurrencyLoadBalancer<T> implements LeastConcurrencyLoadBalancer<T> {
+        private static Metrics NOOP_METRICS = new Metrics() {
+
+            @Override
+            public double requestRate() {
+                return 0;
+            }
+
+            @Override
+            public double successRate() {
+                return 0;
+            }
+
+            @Override
+            public double failureRate() {
+                return 0;
+            }
+
+            @Override
+            public double requestCOV() {
+                return 0;
+            }
+        };
         /**
          * Instantiates a NoopLeastConcurrencyLoadBalancer
          */
@@ -17,7 +39,7 @@ public interface LeastConcurrencyLoadBalancer<T> extends LoadBalancer<Completabl
 
         @Override
         public Metrics getMetrics() {
-            return null;
+            return NOOP_METRICS;
         }
     }
 

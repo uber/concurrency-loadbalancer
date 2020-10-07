@@ -68,6 +68,15 @@ public class AbstractConcurrencyLoadBalancerTest {
     }
 
     @Test
+    public void testNoopLoadBalancer() {
+        LeastConcurrencyLoadBalancer.Metrics metrics = LeastConcurrencyLoadBalancer.NOOP_INSTANCE.getMetrics();
+        Assert.assertEquals(0, metrics.failureRate(), 0.001);
+        Assert.assertEquals(0, metrics.requestCOV(), 0.001);
+        Assert.assertEquals(0, metrics.requestRate(), 0.001);
+        Assert.assertEquals(0, metrics.successRate(), 0.001);
+    }
+
+    @Test
     public void testRequestCOV() {
         ticker.add(Duration.ofSeconds(6));
         Assert.assertEquals("", metrics.requestCOV(),  0, 0.0001);
