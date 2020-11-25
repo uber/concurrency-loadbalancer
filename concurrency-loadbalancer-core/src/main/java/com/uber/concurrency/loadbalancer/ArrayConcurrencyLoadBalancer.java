@@ -9,7 +9,6 @@ import com.uber.concurrency.loadbalancer.utils.ReservoirSampler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.TreeMap;
@@ -196,18 +195,6 @@ public final class ArrayConcurrencyLoadBalancer<T> extends AbstractConcurrencyLo
             this.rand = rand;
         }
 
-        @VisibleForTesting
-        protected T select(int index) {
-            if (index >= totalWeight) {
-                throw new IllegalArgumentException("index must smaller than totalWeight");
-            }
-            Map.Entry<Integer, T> entry = weightMap.floorEntry(index);
-            if (entry == null) {
-                throw new IllegalArgumentException("invalid index");
-            }
-            return entry.getValue();
-        }
-
         /**
          * select one entity out of a collection of entities.
          *
@@ -219,7 +206,7 @@ public final class ArrayConcurrencyLoadBalancer<T> extends AbstractConcurrencyLo
                 return null;
             }
             int selected = rand.nextInt(totalWeight);
-            return select(selected);
+            return weightMap.floorEntry(selected).getValue();
         }
 
         /**
@@ -250,12 +237,11 @@ public final class ArrayConcurrencyLoadBalancer<T> extends AbstractConcurrencyLo
              * @param weight the weight
              */
             @VisibleForTesting
-            void add(T t, int weight) {
-                if (weight <= 0) {
-                    throw new IllegalArgumentException("weight must > 0");
-                }
+            WeightedSelectorBuilder<T> add(T t, int weight) {
+                weight = Math.abs(weight);
                 weightMap.put(totalWeight, t);
                 totalWeight += weight;
+                return this;
             }
 
             /**
@@ -286,7 +272,7 @@ public final class ArrayConcurrencyLoadBalancer<T> extends AbstractConcurrencyLo
      */
     public static class Builder<T>
             extends AbstractBuilder<T, Builder<T>> {
-        private Function<T, TaskConcurrency<T>> taskConcurrencyMap = null;
+        private volatile Function<T, TaskConcurrency<T>> taskConcurrencyMap = null;
         private int groupSize = Integer.MAX_VALUE;
 
         Function<T, TaskConcurrency<T>> getTaskConcurrencyMap() {

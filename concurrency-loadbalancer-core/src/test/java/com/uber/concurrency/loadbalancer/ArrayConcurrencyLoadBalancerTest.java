@@ -153,6 +153,12 @@ public class ArrayConcurrencyLoadBalancerTest {
         Assert.assertEquals(3, result.size());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegtiveFailureEffectiveLatency() {
+        ArrayConcurrencyLoadBalancer.newBuilder(String.class)
+                .withFailureEffectiveLatency(Duration.ofSeconds(-30));
+    }
+
     @Test
     public void testFailureSustain() {
         WritableTicker testTicker = new WritableTicker();
@@ -160,7 +166,7 @@ public class ArrayConcurrencyLoadBalancerTest {
 
         ArrayConcurrencyLoadBalancer<String> loadBalancer = ArrayConcurrencyLoadBalancer.newBuilder(String.class)
                 .withTasks(entries)
-                .withFailureEffectiveLatency(Duration.ofSeconds(30))
+                .withFailureEffectiveLatency(Duration.ofSeconds(30), 100)
                 .withTicker(testTicker)
                 .build();
 

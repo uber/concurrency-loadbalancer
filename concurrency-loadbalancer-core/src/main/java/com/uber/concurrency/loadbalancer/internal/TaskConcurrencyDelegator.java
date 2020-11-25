@@ -1,7 +1,12 @@
 package com.uber.concurrency.loadbalancer.internal;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.time.Duration;
 
+@SuppressFBWarnings(
+        value="EQ_COMPARETO_USE_OBJECT_EQUALS",
+        justification="Note: this class has a natural ordering that is inconsistent with equals.")
 public class TaskConcurrencyDelegator<T> implements TaskConcurrency<T> {
     private final TaskConcurrency<T> delegate;
 

@@ -3,6 +3,7 @@ package com.uber.concurrency.loadbalancer.internal;
 import com.uber.concurrency.loadbalancer.timedcounter.TimedCounter;
 import com.uber.concurrency.loadbalancer.timedcounter.WindowScheduledCounter;
 import com.uber.concurrency.loadbalancer.timedcounter.WindowTimedCounter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.time.Duration;
 
@@ -11,6 +12,9 @@ import java.time.Duration;
  * accumulative latency task
  * @param <T> the type parameter
  */
+@SuppressFBWarnings(
+        value="EQ_COMPARETO_USE_OBJECT_EQUALS",
+        justification="Note: this class has a natural ordering that is inconsistent with equals.")
 public class LatencyTaskConcurrency<T> extends TaskConcurrencyImpl<T> {
     private final TimedCounter durationMs;
 

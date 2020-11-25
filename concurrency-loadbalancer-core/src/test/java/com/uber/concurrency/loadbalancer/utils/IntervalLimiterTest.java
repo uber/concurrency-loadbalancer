@@ -14,6 +14,7 @@ public class IntervalLimiterTest {
     @Before
     public void setup() {
         ticker = new WritableTicker();
+        new IntervalLimiter(TimeUnit.SECONDS.toNanos(5));
         limiter = new IntervalLimiter(TimeUnit.SECONDS.toNanos(5), ticker);
     }
 

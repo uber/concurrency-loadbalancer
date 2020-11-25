@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -65,7 +65,7 @@ public final class RoundRobinLoadBalancer<T> implements LoadBalancer<T> {
      */
     public static class RoundRobinLoadBalancerBuilder<T> {
         private List<T> tasks = Collections.emptyList();
-        private int initialIndex = new Random().nextInt();
+        private int initialIndex = ThreadLocalRandom.current().nextInt();
 
         /**
          * with a list of task

@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -135,7 +136,7 @@ public class HashIndexedPriorityQueue<E> extends AbstractQueue<E> implements Set
             return false;
         }
         E result = removeByIndex(index);
-        Objects.nonNull(result);
+        Objects.requireNonNull(result);
         return true;
     }
 
@@ -144,10 +145,10 @@ public class HashIndexedPriorityQueue<E> extends AbstractQueue<E> implements Set
      */
     @VisibleForTesting
     protected void validate() {
-        for (E e: entityToIndex.keySet()) {
-            int index = entityToIndex.get(e);
-            if (entityList.get(index) != e) {
-                throw new IllegalStateException("entity " + e + " is not at expected index " + index);
+        for (Map.Entry<E,Integer> entry: entityToIndex.entrySet()) {
+            int index = entry.getValue();
+            if (entityList.get(index) != entry.getKey()) {
+                throw new IllegalStateException("entity " + entry + " is not at expected index " + index);
             }
         }
     }

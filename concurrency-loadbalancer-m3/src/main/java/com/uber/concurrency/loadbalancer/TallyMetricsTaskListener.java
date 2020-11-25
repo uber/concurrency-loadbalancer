@@ -109,12 +109,10 @@ public class TallyMetricsTaskListener<T> implements CompletableTask.Listener<T> 
         long newTick = ticker.read();
         long age = newTick - oldTick;
         //report standard deviation of m1/5/15 rates to M3 to indicates balance of load balancing
-        if (age > TICK_INTERVAL_NANOS) {
-            if (this.lastTick.compareAndSet(oldTick, newTick)) {
-                    scope.gauge(METRIC_NAME_M1RATE_STDDEV).update(calcStandardDeviation(o->o.m1Rate));
-                    scope.gauge(METRIC_NAME_M5RATE_STDDEV).update(calcStandardDeviation(o->o.m5Rate));
-                    scope.gauge(METRIC_NAME_M15RATE_STDDEV).update(calcStandardDeviation(o->o.m15Rate));
-            }
+        if (age > TICK_INTERVAL_NANOS && this.lastTick.compareAndSet(oldTick, newTick)) {
+            scope.gauge(METRIC_NAME_M1RATE_STDDEV).update(calcStandardDeviation(o->o.m1Rate));
+            scope.gauge(METRIC_NAME_M5RATE_STDDEV).update(calcStandardDeviation(o->o.m5Rate));
+            scope.gauge(METRIC_NAME_M15RATE_STDDEV).update(calcStandardDeviation(o->o.m15Rate));
         }
     }
 

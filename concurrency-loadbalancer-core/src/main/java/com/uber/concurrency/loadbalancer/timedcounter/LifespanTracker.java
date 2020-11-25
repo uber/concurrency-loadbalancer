@@ -37,9 +37,9 @@ class LifespanTracker {
     /**
      * Instantiates a new tracker.
      *
-     * @param maxAge    the max duration
-     * @param nWindows  the number of windows
-     * @param ticker the clock to provide time in nano
+     * @param maxAge   the max duration
+     * @param nWindows the number of windows
+     * @param ticker   the clock to provide time in nano
      */
     LifespanTracker(Duration maxAge, int nWindows, Ticker ticker) {
         if (nWindows <= 0) {
@@ -58,7 +58,7 @@ class LifespanTracker {
         this.ticker = ticker;
         this.windowNanos = maxAge.dividedBy(nWindows).toNanos();
         this.windows = new Window[nWindows];
-        for (int i = 0; i < nWindows ; ++i) {
+        for (int i = 0; i < nWindows; ++i) {
             windows[i] = new Window();
         }
     }
@@ -84,9 +84,9 @@ class LifespanTracker {
             return nowNanos;
         }
         long windowId = (nowNanos + timeToLive.toNanos()) / windowNanos;
-        long windowUpperNano = (windowId +1) * windowNanos;
+        long windowUpperNano = (windowId + 1) * windowNanos;
         //windowId could be negative
-        int index = (int)(((windowId % totalWindows) + totalWindows) % totalWindows);
+        int index = (int) (((windowId % totalWindows) + totalWindows) % totalWindows);
 
         Window window = windows[index];
 
@@ -128,17 +128,15 @@ class LifespanTracker {
             long windowId = nanoTimestamp / windowNanos;
             //lastWindowId indicates last logical window which count is in-sync with global count
             long id = lastWindowId.get();
-            if (id < windowId) {
-                if (lastWindowId.compareAndSet(id, windowId)) {
-                    //only one thread can entry here for the same lastWindowId
-                    int n = 0;
-                    for (; id < windowId && n < totalWindows; id++, n++) {
-                        //recycle all expired window, minus count from global count
-                        int index = (int)(((id % totalWindows) + totalWindows) % totalWindows);
-                        Window window = windows[index];
-                        if (window.count.get() != 0 && window.windowId < windowId) {
-                            toBePurged.addAndGet(window.count.getAndSet(0));
-                        }
+            if (id < windowId && lastWindowId.compareAndSet(id, windowId)) {
+                //only one thread can entry here for the same lastWindowId
+                int n = 0;
+                for (; id < windowId && n < totalWindows; id++, n++) {
+                    //recycle all expired window, minus count from global count
+                    int index = (int) (((id % totalWindows) + totalWindows) % totalWindows);
+                    Window window = windows[index];
+                    if (window.count.get() != 0 && window.windowId < windowId) {
+                        toBePurged.addAndGet(window.count.getAndSet(0));
                     }
                 }
             }
@@ -174,6 +172,7 @@ class LifespanTracker {
     protected Ticker getTicker() {
         return ticker;
     }
+
     /**
      * Gets Window length in nanos.
      *

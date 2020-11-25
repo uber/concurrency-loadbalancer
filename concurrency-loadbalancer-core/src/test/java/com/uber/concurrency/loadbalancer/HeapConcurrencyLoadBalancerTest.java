@@ -181,13 +181,19 @@ public class HeapConcurrencyLoadBalancerTest {
         Assert.assertEquals(1, result.size());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegtiveFailureEffectiveLatency() {
+        HeapConcurrencyLoadBalancer.newBuilder(String.class)
+                .withFailureEffectiveLatency(Duration.ofSeconds(-30));
+    }
+
     @Test
     public void testFailureSustain() {
         ArrayList<String> entries = new ArrayList<String>() {{add("a"); add("b");}};
         WritableTicker testTicker = new WritableTicker();
         HeapConcurrencyLoadBalancer<String> loadBalancer = HeapConcurrencyLoadBalancer.newBuilder(String.class)
                 .withTasks(entries)
-                .withFailureEffectiveLatency(Duration.ofSeconds(30))
+                .withFailureEffectiveLatency(Duration.ofSeconds(30), 100)
                 .withTicker(testTicker)
                 .build();
 
