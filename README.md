@@ -1,3 +1,6 @@
+# Disclaimer
+This project is stable and being incubated for long-term support
+
 # Overview
 Generally, load balancer is a piece of software or hardware that distributes workload among multiple partitions. 
 Take microservice domain as an example, a load balancer distributes requests among a cluster of servers. 
