@@ -41,10 +41,6 @@
             <artifactId>tally-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.uber.m3</groupId>
-            <artifactId>tallyfactory</artifactId>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

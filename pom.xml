@@ -39,7 +39,6 @@
         <powermock.version>1.6.4</powermock.version>
         <opentracing.version>0.32.0</opentracing.version>
         <tally.core.version>0.3.1</tally.core.version>
-        <tally.factory.version>0.2.3</tally.factory.version>
         <checkstyle.version>2.17</checkstyle.version>
         <checkstyle.config.location>checkstyles/uber_checks.xml</checkstyle.config.location>
         <pmd.version>3.14.0</pmd.version>
@@ -80,11 +79,6 @@
                 <groupId>com.uber.m3</groupId>
                 <artifactId>tally-core</artifactId>
                 <version>${tally.core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.uber.m3</groupId>
-                <artifactId>tallyfactory</artifactId>
-                <version>${tally.factory.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
