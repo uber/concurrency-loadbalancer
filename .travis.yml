@@ -1,3 +1,11 @@
 language: java
 jdk:
 - openjdk8
+before_script:
+  - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
+install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+script:
+  - mvn test -B
+  - fossa init
+  - fossa analyze
