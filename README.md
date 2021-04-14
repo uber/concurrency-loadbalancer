@@ -1,4 +1,6 @@
 # Disclaimer
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fuber%2Fconcurrency-loadbalancer.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fuber%2Fconcurrency-loadbalancer?ref=badge_shield)
+
 This project is stable and being incubated for long-term support
 
 # Overview
@@ -75,3 +77,6 @@ HeapConcurrencyLoadBalancer<String> loadBalancer = HeapConcurrencyLoadBalancer.n
 # Integration
 TODO
 GRPC example
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fuber%2Fconcurrency-loadbalancer.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fuber%2Fconcurrency-loadbalancer?ref=badge_large)
