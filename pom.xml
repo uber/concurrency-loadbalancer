@@ -29,24 +29,25 @@
 
     <properties>
         <concurrency-loadbalancer.version>0.1-SNAPSHOT</concurrency-loadbalancer.version>
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>11</jdk.version>
         <guava.version>30.1-jre</guava.version>
         <io.dropwizard.metrics.version>3.1.1</io.dropwizard.metrics.version>
         <commons-math3.version>3.4.1</commons-math3.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <junit.version>4.13.1</junit.version>
-        <mockito.version>1.10.19</mockito.version>
-        <powermock.version>1.6.4</powermock.version>
+        <mockito.version>2.23.4</mockito.version>
+        <powermock.version>2.0.2</powermock.version>
         <opentracing.version>0.32.0</opentracing.version>
         <tally.core.version>0.3.1</tally.core.version>
         <checkstyle.version>2.17</checkstyle.version>
         <checkstyle.config.location>checkstyles/uber_checks.xml</checkstyle.config.location>
         <pmd.version>3.14.0</pmd.version>
-        <spotbugs.version>3.1.0-RC6</spotbugs.version>
+        <spotbugs.version>3.1.10</spotbugs.version>
         <findbugs.version>3.0.0</findbugs.version>
         <jacoco.version>0.8.6</jacoco.version>
-        <javadoc.version>2.10.4</javadoc.version>
+        <javadoc.version>3.2.0</javadoc.version>
         <surefire.version>2.18.1</surefire.version>
+        <source.plugin.version>2.1.2</source.plugin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -87,7 +88,7 @@
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
+                <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
             </dependency>
             <dependency>
@@ -103,7 +104,7 @@
             </dependency>
             <dependency>
                 <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito</artifactId>
+                <artifactId>powermock-api-mockito2</artifactId>
                 <version>${powermock.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -142,6 +143,11 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${javadoc.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${source.plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -154,6 +160,40 @@
                         <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
                     </systemPropertyVariables>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>deploy</phase>
+                        <goals><goal>jar-no-fork</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>deploy</phase>
+                        <goals><goal>jar</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- explicitly define maven-deploy-plugin after other to force exec order -->
+                <artifactId>maven-deploy-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals><goal>deploy</goal></goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

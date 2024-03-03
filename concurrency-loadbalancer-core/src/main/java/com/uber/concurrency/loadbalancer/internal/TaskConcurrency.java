@@ -17,8 +17,6 @@ public interface TaskConcurrency<T> extends Comparable<TaskConcurrency> {
 
     /**
      * Acquire task
-     *
-     * @return concurrency
      */
     default void acquire() {
         acquire(1);
@@ -29,7 +27,6 @@ public interface TaskConcurrency<T> extends Comparable<TaskConcurrency> {
      *
      * @param succeed the result
      * @param latency the latency
-     * @return concurrency
      */
     default void complete(boolean succeed, Duration latency) {
         complete(1, latency);
@@ -39,7 +36,6 @@ public interface TaskConcurrency<T> extends Comparable<TaskConcurrency> {
      * Acquire tasks in batch
      *
      * @param n number of requests processed
-     * @return the int
      */
     void acquire(int n);
 
@@ -48,7 +44,6 @@ public interface TaskConcurrency<T> extends Comparable<TaskConcurrency> {
      *
      * @param n        number of requests
      * @param latency total duration
-     * @return concurrency
      */
     void complete(int n, Duration latency);
 

@@ -12,11 +12,13 @@ import java.util.Random;
  *
  * Example:
  * <pre>
+ * {@code
  * ReservoirSampler<Entity> sampler = new ReservoirSampler();
  * for(Entity e : entities) {
  *     sampler.sample(e);
  * }
  * Entity selected = sampler.get();
+ * }
  * </pre>
  * @param <T> the entity type
  */

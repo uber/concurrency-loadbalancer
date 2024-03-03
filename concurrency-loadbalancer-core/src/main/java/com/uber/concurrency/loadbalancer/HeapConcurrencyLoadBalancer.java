@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </P>
  * Example:
  * <pre>
+ * {@code
  * ArrayList<String> urls = new ArrayList<String>() {{add("http://192.168.0.1:80"); add("http://192.168.0.2:80");}};
  *
  * HeapConcurrencyLoadBalancer<String> loadBalancer = HeapConcurrencyLoadBalancer.newBuilder()
@@ -37,9 +38,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * CompletableTask<String> url = loadBalancer.next();
  * boolean succeed = doPost(url.getTask()); //make rest call with url.getTask()
  * url.complete(succeed);                   //finish the task
- *
+ * }
  * </pre>
- * @param <T> the type parameter
  */
 public final class HeapConcurrencyLoadBalancer<T> extends AbstractConcurrencyLoadBalancer<T> {
     private final TaskConcurrencyQueue<T> taskConcurrencyQueue;
@@ -75,10 +75,12 @@ public final class HeapConcurrencyLoadBalancer<T> extends AbstractConcurrencyLoa
      *
      * To prevent surge of failure, specify timeout to treat failure as timeout
      * <pre>
+     * {@code
      * HeapConcurrencyLoadBalancer<String> loadBalancer = HeapConcurrencyLoadBalancer.newBuilder(String.class)
      *                 .withTasks(entries)
      *                 .withTimeout(Duration.ofSeconds(10))
      *                 .build();
+     * }
      * </pre>
      * @param <T> the type parameter
      */

@@ -34,15 +34,15 @@ import java.util.function.Function;
  * </p>
  * Example:
  * <pre>
+ * {@code
  * ArrayList<String> entries = new ArrayList<String>() {{add("a"); add("b");}};
  *
  * ArrayConcurrencyLoadBalancer<String> loadBalancer = ArrayConcurrencyLoadBalancer.newBuilder()
  *                 .withTasks(entries)
  *                 .build();
  * loadBalancer.next();
+ * }
  * </pre>
- *
- * @param <T> the type parameter
  */
 public final class ArrayConcurrencyLoadBalancer<T> extends AbstractConcurrencyLoadBalancer<T> {
     private static final TaskConcurrency LEAST_TASK_CONCURRENCY = new TaskConcurrency.Noop(Integer.MAX_VALUE);

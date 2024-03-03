@@ -2,6 +2,7 @@ package com.uber.concurrency.loadbalancer;
 
 import com.google.common.collect.ImmutableList;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * interaction evenly across all entities with index
  *
  * Example:
+ * {@code
  * String[] tasks = new String[]{"a", "b", "c", "d", "e"};
  *
  * RoundRobinLoadBalancer lb = RoundRobinLoadBalancer
@@ -19,11 +21,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  *                 .withTasks(Arrays.asList(tasks))
  *                 .build();
  * return lb.next();
- *
- * @ThreadSafe
- *
+ * }
  * @param <T> the type parameter
  */
+@ThreadSafe
 public final class RoundRobinLoadBalancer<T> implements LoadBalancer<T> {
     private final ImmutableList<T> tasks;
     private final AtomicInteger index;
