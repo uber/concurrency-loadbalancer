@@ -17,6 +17,7 @@ import java.util.function.Function;
  *
  * usage:
  * <pre>
+ * {@code
  * TallyMetricsTaskListener listener = TallyMetricsTaskListener.newBuilder(String.class)
  *                 .withName("my-loadBalancer")
  *                 .build(mockScope);
@@ -25,6 +26,7 @@ import java.util.function.Function;
  *                 .withTasks(entries)
  *                 .withTaskListener(listener)
  *                 .build();
+ * }
  * </pre>
  * @param <T> the type parameter
  */

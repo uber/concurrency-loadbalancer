@@ -10,6 +10,7 @@ import io.opentracing.Tracer;
  *
  * Usage:
  * <pre>
+ * {@code
  * TracingTaskListener<String> listener = TracingTaskListener.newBuilder(String.class)
  *                 .withName("a-loadBalancer")
  *                 .withTaskNameMapper(o->o+"Name")
@@ -19,8 +20,8 @@ import io.opentracing.Tracer;
  *                 .withTasks(entries)
  *                 .withTaskListener(listener)
  *                 .build();
+ * }
  * </pre>
- * @param <T> the type parameter
  */
 public class TracingTaskListener<T> implements CompletableTask.Listener<T> {
     private static final Function<Object, String> DEFAULT_TASK_NAME_MAPPER = o->o.toString();

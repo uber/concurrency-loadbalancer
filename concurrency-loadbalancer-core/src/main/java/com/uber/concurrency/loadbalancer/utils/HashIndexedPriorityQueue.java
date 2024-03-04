@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * HashIndexedPriorityQueue implemented both interfaces of Queue<> and Set<>
+ * HashIndexedPriorityQueue implemented both interfaces of Queue and Set
  * Comparing with {@link java.util.PriorityQueue}, HashIndexedPriorityQueue
  * - reduced contains(obj)/remove(obj) complexity from O(n) to O(logN)
  * - offer(obj)/add(obj) ensures uniqueness
@@ -31,6 +31,7 @@ import java.util.Set;
  *
  * Example: Suppose class Entity.value is Integer
  * <pre>
+ * {@code
  * class Entity {
  *     int value;
  *     Entity(int v) {
@@ -42,6 +43,7 @@ import java.util.Set;
  * //add entities into queue
  * entity1.value+=1; //change order of entity
  * queue.offer(entity1) //if entity1 is not in the queue, it will be added. otherwise order of entity1 will be in-place adjusted
+ * }
  * </pre>
  *
  * @param <E> the type parameter
@@ -73,7 +75,7 @@ public class HashIndexedPriorityQueue<E> extends AbstractQueue<E> implements Set
 
     /**
      * Instantiates a new Hash indexed priority queue.
-     * use (e1, e2) -> e1.compareTo(e2) as default comparator
+     * use {@code(e1, e2) -> e1.compareTo(e2)} as default comparator
      */
     public HashIndexedPriorityQueue() {
         this(null);
@@ -94,7 +96,7 @@ public class HashIndexedPriorityQueue<E> extends AbstractQueue<E> implements Set
      * 2. adjust order in-place with O(logn) complexity, if obj exist.
      *
      * @param e entity to add or update order
-     * @return
+     * @return true indicates element added successfully
      */
     @Override
     public boolean offer(E e) {

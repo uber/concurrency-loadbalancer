@@ -3,6 +3,7 @@ package com.uber.concurrency.loadbalancer.timedcounter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Ticker;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
@@ -21,22 +22,23 @@ import java.util.function.Consumer;
  * for this case .check() @12s will call consumer.accept(2)
  * Example:
  * <pre>
+ * {@code
  * WindowScheduledCounter scheduledCounter = WindowScheduledCounter.newBuilder()
  *                 .withMaxDelay(Duration.ofSeconds(30))
  *                 .withNumWindow(100)
  *                 .of(consumer);
  * scheduledCounter.schedule(1, Duration.ofMillis(delayMs));
  * scheduledCounter.check() //check and push count to consumer
+ * }
  * </pre>
- *
  * <p>
  * Performance related
  * more windows indicates higher precision but also more CPU cost
  * ScheduledCounter use the number of window as its concurrency limit, when the limit reached
  * </p>
  *
- * @TheadSafe
  */
+@ThreadSafe
 public class WindowScheduledCounter implements ScheduledCounter {
     final LifespanTracker lifespanTracker;
     private final Consumer<Long> consumer;
