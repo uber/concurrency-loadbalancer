@@ -12,6 +12,8 @@
     <description>
         concurrency-loadbalancer is a logical load balancer aims to optimize both throughput and latency for system under load.
     </description>
+    <url>https://github.com/uber/concurrency-loadbalancer</url>
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -29,7 +31,19 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
+    <developers>
+        <developer>
+            <name>Zhifeng Chen</name>
+            <email>ericzhifengchen@gmail.com</email>
+            <organization>Uber</organization>
+            <organizationUrl>https://github.com/uber</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/uber/concurrency-loadbalancer.git</connection>
+        <developerConnection>scm:git:ssh://github.com:uber/concurrency-loadbalancer.git</developerConnection>
+        <url>https://github.com/uber/concurrency-loadbalancer/tree/main</url>
+    </scm>
     <modules>
         <module>concurrency-loadbalancer-core</module>
         <module>concurrency-loadbalancer-tracing</module>
