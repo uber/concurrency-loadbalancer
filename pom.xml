@@ -7,7 +7,7 @@
     <groupId>com.uber.concurrency-loadbalancer</groupId>
     <artifactId>concurrency-loadbalancer</artifactId>
     <packaging>pom</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.5</version>
     <name>concurrency-loadbalancer</name>
     <description>
         concurrency-loadbalancer is a logical load balancer aims to optimize both throughput and latency for system under load.
@@ -51,7 +51,7 @@
     </modules>
 
     <properties>
-        <concurrency-loadbalancer.version>0.1-SNAPSHOT</concurrency-loadbalancer.version>
+        <concurrency-loadbalancer.version>0.1.5</concurrency-loadbalancer.version>
         <jdk.version>11</jdk.version>
         <guava.version>30.1-jre</guava.version>
         <io.dropwizard.metrics.version>3.1.1</io.dropwizard.metrics.version>
