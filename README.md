@@ -75,7 +75,6 @@ HeapConcurrencyLoadBalancer<String> loadBalancer = HeapConcurrencyLoadBalancer.n
 ```
 
 # Integration
-TODO
 GRPC example
 
 ## License
